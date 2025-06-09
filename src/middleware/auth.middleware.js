@@ -9,18 +9,20 @@ const protectRoute = async (req, res, next) => {
     }
 
     const token = authHeader.replace("Bearer ", "").trim();
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId).select("-password");
 
+    const user = await User.findById(decoded.userId).select("-password");
     if (!user) {
-      return res.status(401).json({ message: "Token is not Validd" });
+      return res.status(401).json({ message: "Token is not Valid" });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Auth error:", error.message);
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({ message: "Token expired" });
+    }
     return res.status(401).json({ message: "Token is not Valid" });
   }
 };

@@ -17,7 +17,7 @@ job.start(); // Start the cron job
 app.use(express.json()); // to parse JSON bodies
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
-app.use("/api/dummy", dummyRoutes);
+// app.use("/api/dummy", dummyRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

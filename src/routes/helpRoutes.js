@@ -5,7 +5,7 @@ import protectRoute from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 // Get dummy data in sequential order by id
-router.get("/dummy", protectRoute, async (req, res) => {
+router.get("/", protectRoute, async (req, res) => {
   try {
     const dummyData = await Help.find().sort({ id: 1 }); // <-- Add sort by id ascending
 

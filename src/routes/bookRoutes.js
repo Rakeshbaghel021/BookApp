@@ -2,6 +2,7 @@ import express from "express";
 import cloudinary from "../lib/cloudinary.js";
 import Book from "../Models/Book.js";
 import protectRoute from "../middleware/auth.middleware.js";
+import Dummy from "../Models/Dummy.js";
 
 const router = express.Router();
 
@@ -98,13 +99,19 @@ router.delete("/:id", protectRoute, async (req, res) => {
   }
 });
 
-router.get("/dummy", async (req, res) => {
+// Get dummy data
+router.get("/dummy", protectRoute, async (req, res) => {
   try {
     const dummyData = await Dummy.find().sort({ createdAt: -1 });
-    res.status(200).json({ data: dummyData });
+
+    if (!dummyData || dummyData.length === 0) {
+      return res.status(404).json({ message: "No dummy data found" });
+    }
+
+    res.status(200).json({ success: true, data: dummyData });
   } catch (error) {
     console.error("Error fetching dummy data:", error);
-    res.status(500).json({ message: "Failed to fetch dummy data" });
+    res.status(500).json({ message: "Server error while fetching dummy data" });
   }
 });
 
